@@ -1,0 +1,9 @@
+[Unit]
+Description=Linux Remote Control server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /opt/lrc-server/lrc.js
+
+[Install]
+WantedBy=multi-user.target
