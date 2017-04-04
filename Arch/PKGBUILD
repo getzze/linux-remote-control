@@ -1,0 +1,47 @@
+# $Id$
+# Maintainer: getzze <getzze@gmail.com>
+
+pkgname=linux-remote-control
+pkgdesc="Turn any device into a complete remote control for your GNU/Linux."
+pkgver=0.4
+pkgrel=1
+arch=(i686 x86_64)
+url="http://www.linuxremotecontrol.com"
+license=(GPL)
+depends=(nodejs xdotool xorg-xbacklight)
+_commit=5c9b58a4eb3d0081b1a51a1e4edadd61071e0ab1
+source=("git+https://github.com/getzze/linux-remote-control/commit/$_commit")
+sha256sums=('SKIP')
+options=(!emptydirs)
+
+build() {
+
+}
+
+package() {
+  cd "${srcdir}"
+  mkdir -p "${pkgdir}"/opt/
+  cp -R opt/lrc-client "${pkgdir}"/opt/.
+  chown -R http:http "${pkgdir}"/opt/lrc-client
+  cp -R opt/lrc-server "${pkgdir}"/opt/.
+
+  mkdir -p "${pkgdir}/usr/lib/systemd/user/"
+  install -Dm644 "${srcdir}/Arch/lrc.service" "${pkgdir}/usr/lib/systemd/user/"
+  echo
+  echo '------------------------------------------------------------------------------'
+  echo '------------------------- WARNING --------------------------------------------'
+  echo '------------------------------------------------------------------------------'
+  echo '   Remember to enable the client in your http server.                         '
+  echo '   For Apache:                                                                '
+  echo '       cp /opt/lrc-client/apache.example.conf /etc/httpd/conf/extra/lrc.conf  '
+  echo '   And include the line in /etc/httpd/conf/httpd.conf:                        '
+  echo '       Include conf/extra/nextcloud.conf                                      '
+  echo '                                                                              '
+  echo '   Start the server with:                                                     '
+  echo '       node /opt/lrc-server/lrc.js                                            '
+  echo '   Or use the systemd service:                                                '
+  echo '       systemctl --user start lrc                                                    '
+  echo '------------------------------------------------------------------------------'
+}
+
+
