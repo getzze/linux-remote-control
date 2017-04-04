@@ -11,9 +11,12 @@ license=('GPL3')
 depends=('nodejs' 'xdotool' 'xorg-xbacklight')
 optdepends=('apache: http server')
 source=('lrc::git+https://github.com/getzze/linux-remote-control.git#branch=archlinux'
-        'lrc.service')
+        'lrc.service'
+        'apache.example.conf')
 md5sums=('SKIP'
-         '05dd1b6a2ecf28184c9342b5a23a5fbb')
+         '05dd1b6a2ecf28184c9342b5a23a5fbb'
+         'a2990948fbba400b230c0a76cce2012b')
+install=($pkgname.install)
 options=(!emptydirs)
 
 build() {
@@ -22,28 +25,17 @@ build() {
 
 package() {
   cd "${srcdir}/lrc"
+  mkdir -p "${pkgdir}"/srv/http/
+  cp -R opt/lrc-client "${pkgdir}"/srv/http/.
+  chown -R http:http "${pkgdir}"/srv/http/lrc-client
   mkdir -p "${pkgdir}"/opt/
-  cp -R opt/lrc-client "${pkgdir}"/opt/.
-  chown -R http:http "${pkgdir}"/opt/lrc-client
   cp -R opt/lrc-server "${pkgdir}"/opt/.
+
+  mkdir -p "${pkgdir}"/etc/webapps/lrc-client/
+  install -Dm644 "${srcdir}"/apache.example.conf "${pkgdir}"/etc/webapps/lrc-client/
 
   mkdir -p "${pkgdir}/usr/lib/systemd/user/"
   install -Dm644 "${srcdir}"/lrc.service "${pkgdir}/usr/lib/systemd/user/"
-  echo
-  echo '------------------------------------------------------------------------------'
-  echo '------------------------- WARNING --------------------------------------------'
-  echo '------------------------------------------------------------------------------'
-  echo '   Remember to enable the client in your http server.                         '
-  echo '   For Apache:                                                                '
-  echo '       cp /opt/lrc-client/apache.example.conf /etc/httpd/conf/extra/lrc.conf  '
-  echo '   And include the line in /etc/httpd/conf/httpd.conf:                        '
-  echo '       Include conf/extra/nextcloud.conf                                      '
-  echo '                                                                              '
-  echo '   Start the server with:                                                     '
-  echo '       node /opt/lrc-server/lrc.js                                            '
-  echo '   Or use the systemd service:                                                '
-  echo '       systemctl --user start lrc                                                    '
-  echo '------------------------------------------------------------------------------'
 }
 
 

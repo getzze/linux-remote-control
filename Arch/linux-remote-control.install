@@ -1,0 +1,22 @@
+
+post_install() {
+  echo
+  echo '-----------------------------------------------------------------------------------------'
+  echo '------------------------- WARNING -------------------------------------------------------'
+  echo '-----------------------------------------------------------------------------------------'
+  echo '   The client is installed in /srv/http/lrc-client/. It can be copied to the client      '
+  echo '   machine and run index.html from the browser or loaded by an http server on the        '
+  echo '   server machine.                                                                       '
+  echo '   For Apache, copy the example to the httpd folder:                                     '
+  echo '       cp /etc/webapps/lrc-client/apache.example.conf /etc/httpd/conf/extra/lrc.conf     ' 
+  echo '   Then include the following lines in /etc/httpd/conf/httpd.conf:                       '
+  echo '       # Linux Remote Control                                                            '
+  echo '       Include conf/extra/lrc.conf                                                       '
+  echo '                                                                                         '
+  echo '   Start the server with:                                                                '
+  echo '       node /opt/lrc-server/lrc.js                                                       '
+  echo '   Or use the systemd service:                                                           '
+  echo '       systemctl --user start lrc                                                        '
+  echo '-----------------------------------------------------------------------------------------'
+}
+
