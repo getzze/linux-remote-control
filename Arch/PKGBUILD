@@ -5,28 +5,30 @@ pkgname=linux-remote-control
 pkgdesc="Turn any device into a complete remote control for your GNU/Linux."
 pkgver=0.4
 pkgrel=1
-arch=(i686 x86_64)
-url="http://www.linuxremotecontrol.com"
-license=(GPL)
-depends=(nodejs xdotool xorg-xbacklight)
-_commit=5c9b58a4eb3d0081b1a51a1e4edadd61071e0ab1
-source=("git+https://github.com/getzze/linux-remote-control/commit/$_commit")
-sha256sums=('SKIP')
+arch=('i686' 'x86_64')
+url='http://www.linuxremotecontrol.com'
+license=('GPL3')
+depends=('nodejs' 'xdotool' 'xorg-xbacklight')
+optdepends=('apache: http server')
+source=('lrc::git+https://github.com/getzze/linux-remote-control.git#branch=archlinux'
+        'lrc.service')
+md5sums=('SKIP'
+         '05dd1b6a2ecf28184c9342b5a23a5fbb')
 options=(!emptydirs)
 
 build() {
-
+  cd "${srcdir}"
 }
 
 package() {
-  cd "${srcdir}"
+  cd "${srcdir}/lrc"
   mkdir -p "${pkgdir}"/opt/
   cp -R opt/lrc-client "${pkgdir}"/opt/.
   chown -R http:http "${pkgdir}"/opt/lrc-client
   cp -R opt/lrc-server "${pkgdir}"/opt/.
 
   mkdir -p "${pkgdir}/usr/lib/systemd/user/"
-  install -Dm644 "${srcdir}/Arch/lrc.service" "${pkgdir}/usr/lib/systemd/user/"
+  install -Dm644 "${srcdir}"/lrc.service "${pkgdir}/usr/lib/systemd/user/"
   echo
   echo '------------------------------------------------------------------------------'
   echo '------------------------- WARNING --------------------------------------------'
