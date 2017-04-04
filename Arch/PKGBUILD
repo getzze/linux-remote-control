@@ -16,7 +16,7 @@ source=('lrc::git+https://github.com/getzze/linux-remote-control.git#branch=arch
 md5sums=('SKIP'
          '05dd1b6a2ecf28184c9342b5a23a5fbb'
          'a2990948fbba400b230c0a76cce2012b')
-install=($pkgname.install)
+install=$pkgname.install
 options=(!emptydirs)
 
 build() {
